@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fruit Basket</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&family=Cinzel:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="style.css">
+
+<link rel="icon" href="logo.png">
+<link rel="apple-touch-icon" href="logo.png">
+</head>
+
+<body>
+
+<button class="theme-toggle" onclick="toggleTheme()">
+  <i class="fa-solid fa-tree" id="themeIcon"></i>
+</button>
+
+<div id="tree-container">
+  <img src="tree_1.png" id="evo-tree" class="seed-stage">
+  <div class="tree-tooltip" id="tree-msg">Planting...</div>
+</div>
+
+<header class="split-hero">
+  <div class="hero-left">
+    <div id="leaves-container"></div>
+
+    <div class="brand-wrapper fade-up">
+      <div class="logo-stack">
+        <img src="logo.png" class="brand-logo">
+        <h1>Fruit Basket</h1>
+        <p>Premium Fruits • Earth Friendly • Campus Fast</p>
+      </div>
+
+      <div class="hero-img-frame">
+        <img src="fruit_basket.avif">
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="form-container slide-in-right">
+      <h3>Start by Entering your details</h3>
+
+      <form 
+        id="orderForm" 
+        action="https://formsubmit.co/fruitbasket.kgp@gmail.com" 
+        method="POST" 
+        enctype="multipart/form-data">
+
+        <input type="hidden" name="_cc" value="demo_cc@gmail.com">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_subject" value="New Fruit Basket Order! 🍎">
+        <input type="hidden" name="_template" value="table">
+        <input type="hidden" name="_cc" value="muinuddinmohd4@gmail.com">
+        <input type="hidden" name="cart_details" id="cartField">
+        <input type="hidden" name="total_amount" id="finalAmountField">
+        <input type="hidden" name="delivery_instructions" id="hiddenInstructions">
+        <!-- <input type="hidden" name="_next" value="https://fruit-basket-kgp.netlify.app/thankyou.html"> -->
+
+        <div class="input-block">
+          <label>Name</label>
+          <input name="name" id="name" required>
+        </div>
+
+        <div class="input-block">
+          <label>Phone Number</label>
+          <input name="phone" id="phone" required>
+        </div>
+
+        <div class="input-block">
+          <label>Email</label>
+          <input name="email" id="email" type="email" required>
+        </div>
+
+        <div class="input-block">
+          <label>Where</label>
+          <select name="hall" id="hall" required>
+            <option value="">Drop Down</option>
+            <option>Azad</option><option>B C Roy</option><option>B R Ambedkar</option>
+            <option>Gokhale</option><option>HJB</option><option>JCB</option><option>LLR</option>
+            <option>LBS</option><option>MS</option><option>MMM</option><option>Mother Teresa, MT</option><option>Nehru</option>
+            <option>Nivedita</option><option>Patel</option><option>Radha Krishan, RK</option>
+            <option>Rajendta Prasad, RP</option><option>Rani Laxmibai</option>
+            <option>Sarojini Naidu - Indira Gandhi</option>
+            <option>Sir Ashutosh Mukherjee</option><option>Vidyasagar</option>
+            <option>Zakir Hussain</option><option>Nalanda Complex</option><option>Other - Mention in delivery-instructions</option>
+          </select>
+        </div>
+
+        <!-- <div class="input-block">
+          <label>Room Number</label>
+          <input name="room" id="room" required>
+        </div> -->
+
+        <div class="input-block date-block">
+          <label>Delivery Slot</label>
+          <input name="delivery_date" type="date" id="deliveryDate" required>
+          <small>(6:00 pm to 8:00 pm)</small>
+        </div>
+        <p id="sameDayMsg" style="display: none; margin-top: 20px; font-size: 0.85rem; color: #fff; line-height: 1.4; opacity: 0.9;">
+  Orders placed before 4 PM can be delivered on the same day; orders placed after 4 PM will be delivered the next day.
+</p>
+      </form>
+    </div>
+    <!-- <p>Orders placed before 3 PM can be delivered on the same day; orders placed after 3 PM will be delivered the next day.</p> -->
+  </div>
+</header>
+
+<main class="container">
+
+<section class="menu-section">
+  <div class="section-head">
+    <h2>Nature's Harvest</h2>
+    <div class="divider"></div>
+  </div>
+
+  <h3 class="cat-label">By Weight</h3>
+  <div class="grid-layout" id="fruitContainerWeight"></div>
+
+  <h3 class="cat-label">By Quantity</h3>
+  <div class="grid-layout" id="fruitContainerPiece"></div>
+
+  <h3 class="cat-label">Signature Collections</h3>
+  <div class="grid-layout" id="comboContainer"></div>
+</section>
+
+<div class="delivery-instructions">
+  <h3>Delivery Instructions</h3>
+  <textarea id="deliveryInstructions"></textarea>
+  <small>This helps us deliver accurately & faster.</small>
+</div>
+
+<footer class="contact-footer">
+  <h2>Contact Us</h2>
+  <p>Quality Guarantee: Easy returns at delivery.</p>
+
+  <div class="team-grid">
+    <div class="team-card highlight"><div class="avatar">A</div><div>Ankush<br>+91 70153 40816</div></div>
+    <div class="team-card highlight"><div class="avatar">M</div><div>Muinuddin<br>+91 92192 76397</div></div>
+    <div class="team-card highlight"><div class="avatar">A</div><div>Ashutosh<br>+91 99188 09218</div></div>
+  </div>
+
+  
+  <p>If you have any concerns regarding your order, delivery, or product quality, please don’t hesitate to reach out.</p>
+  <p><a href="mailto:fruitbasket.kgp@gmail.com" id="link-whatsapp">Email</a></p>
+  <p style="margin-top: 20px;">
+    Join our Whatsapp Comunity
+    <a href="https://chat.whatsapp.com/DIKuIeXSG66GdxortQRh43" id="link-whatsapp">here</a>
+  </p>
+</footer>
+
+</main>
+
+<div class="dock" id="dock">
+  <span id="itemCount">0 Items</span> | <span id="totalPrice">₹0</span>
+  <button onclick="openModal()">Proceed</button>
+</div>
+
+<div class="modal-backdrop" id="modal">
+  <div class="modal-content">
+    <!-- <button
+  class="pay-confirm-btn"
+  style="margin-bottom:12px;"
+  onclick="payViaUPI()">
+  Pay via UPI App 📱
+</button> -->
+
+
+    <button onclick="closeModal()" style="background:none; border:none; font-size:1.5rem; float:right; cursor:pointer;">&times;</button>
+    <div style="clear:both;"></div>
+
+    <div class="payment-header">
+      <h3>Confirm Payment</h3>
+      <p class="payment-sub">Scan & pay via any UPI app</p>
+    </div>
+
+    <div id="billSummary" style="text-align:center; font-weight:bold; margin-bottom:10px;"></div>
+
+    <div class="qr-box">
+      <img src="./qr.png">
+      <p class="qr-hint">GPay • PhonePe • Paytm • BHIM</p>
+      <p>Pay full amount to avoid inconvenience.</p>
+    </div>
+
+    <div class="upload-wrap">
+      <label class="upload-label">
+        Upload payment screenshot
+        <input 
+          type="file" 
+          id="paymentFile" 
+          name="payment_screenshot" 
+          accept="image/*" 
+          form="orderForm" 
+          required>
+      </label>
+      <small class="upload-note">Order confirmed after verification</small>
+    </div>
+
+    <div class="payment-file-name" id="paymentFileName" style="display:none;">
+      📎 <span id="fileNameText"></span>
+    </div>
+
+    <button
+      id="placeOrderBtn"
+      class="pay-confirm-btn"
+      type="submit"
+      form="orderForm">
+      Place Order 🌱
+    </button>
+
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
+
+
+
+
+
+
