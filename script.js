@@ -78,7 +78,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 if (deliveryDateInput) {
     // --- CONFIGURATION ---
-    const launchDate = "2026-01-21"; 
+    const launchDate = "2026-01-22"; 
     const now = new Date();
     const currentHour = now.getHours();
     
@@ -456,6 +456,7 @@ function setupFormSubmission() {
     // Form submits naturally to FormSubmit.co
   });
 }
+
 
 
 
