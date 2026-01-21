@@ -1,4 +1,25 @@
+// At the top of your script
+const installContainer = document.getElementById('installContainer');
+const installBtn = document.getElementById('installBtn');
+const installIcon = document.getElementById('installIcon');
+const installHint = document.getElementById('installHint');
 
+window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+
+    // UNLOCK the button instantly when the browser says "Ready"
+    installBtn.disabled = false;
+    installBtn.style.opacity = "1";
+    installIcon.className = "fa-solid fa-download"; // Remove spinner
+    installHint.innerText = "Install App";
+    installContainer.style.display = 'flex';
+});
+
+// Hide if already installed
+window.addEventListener('appinstalled', () => {
+    installContainer.style.display = 'none';
+});
 // ===============================
 // 1. DATA CONFIGURATION
 // ===============================
@@ -78,55 +99,67 @@ document.addEventListener("DOMContentLoaded", () => {
 
 if (deliveryDateInput) {
     // --- CONFIGURATION ---
-    const launchDate = "2026-01-22"; 
-    const now = new Date();
-    const currentHour = now.getHours();
-    
-    // 1. Format Today's Date String
-    const year = now.getFullYear();
-    const month = String(now.getMonth() + 1).padStart(2, '0');
-    const day = String(now.getDate()).padStart(2, '0');
-    const todayStr = `${year}-${month}-${day}`;
-
-    // 2. 4 PM Cutoff Logic
-    // If it is 4 PM (16:00) or later, the earliest delivery is tomorrow
-    let earliestPossible = todayStr;
-    if (currentHour >= 16) {
-      const tomorrow = new Date(now);
-      tomorrow.setDate(tomorrow.getDate() + 1);
-      earliestPossible = `${tomorrow.getFullYear()}-${String(tomorrow.getMonth() + 1).padStart(2, '0')}-${String(tomorrow.getDate()).padStart(2, '0')}`;
-    }
-
-    // 3. Apply Launch Date (Earliest selection is Jan 21)
-    const minSelectable = earliestPossible < launchDate ? launchDate : earliestPossible;
-    deliveryDateInput.min = minSelectable;
-
-    // 4. Logic to toggle the message text
+    const launchDate = "2026-01-21"; 
     const msgPara = document.getElementById("sameDayMsg");
-    
-    if (msgPara) {
-      function checkDate() {
-        const selected = deliveryDateInput.value;
-        if (!selected) {
-          msgPara.style.display = "none";
-          return;
-        }
 
-        msgPara.style.display = "block";
-        
-        if (selected === todayStr) {
-          // This only happens if they order BEFORE 4 PM on or after launch day
-          msgPara.innerHTML = "✅ Order placed before 4 PM: Your fruits will be delivered <strong>today</strong> (6 PM - 8 PM).";
-          msgPara.style.color = "#FFEB3B"; 
-        } else {
-          msgPara.innerHTML = "ℹ️ Order Policy: Orders placed after 4 PM are delivered the next day. Your selected slot is confirmed.";
-          msgPara.style.color = "#fff";
-        }
+    function updateDateConstraints() {
+      const now = new Date();
+      const currentHour = now.getHours();
+      
+      // 1. Format Today's Date String (YYYY-MM-DD)
+      const year = now.getFullYear();
+      const month = String(now.getMonth() + 1).padStart(2, '0');
+      const day = String(now.getDate()).padStart(2, '0');
+      const todayStr = `${year}-${month}-${day}`;
+
+      // 2. Determine Earliest Delivery Date based on 4 PM Cutoff
+      let earliestPossible = todayStr;
+      if (currentHour >= 16) {
+        const tomorrow = new Date(now);
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        earliestPossible = `${tomorrow.getFullYear()}-${String(tomorrow.getMonth() + 1).padStart(2, '0')}-${String(tomorrow.getDate()).padStart(2, '0')}`;
       }
 
-      deliveryDateInput.addEventListener("change", checkDate);
-      checkDate(); // Run once on load
+      // 3. Apply Launch Date Constraint
+      const minSelectable = earliestPossible < launchDate ? launchDate : earliestPossible;
+      deliveryDateInput.min = minSelectable;
+
+      // 4. Force check: If selected date is now invalid, clear it
+      if (deliveryDateInput.value && deliveryDateInput.value < minSelectable) {
+        deliveryDateInput.value = minSelectable;
+      }
+
+      return todayStr;
     }
+
+    function refreshMessage() {
+      const todayStr = updateDateConstraints();
+      const selected = deliveryDateInput.value;
+      const currentHour = new Date().getHours();
+
+      if (!selected) {
+        msgPara.style.display = "none";
+        return;
+      }
+
+      msgPara.style.display = "block";
+      
+      // Logic: Yellow msg ONLY if selected is Today AND it's before 4 PM
+      if (selected === todayStr && currentHour < 16) {
+        msgPara.innerHTML = "✅ <strong>Same-day delivery:</strong> Order before 4 PM to get your fruits tonight (6-8 PM).";
+        msgPara.style.color = "#FFEB3B"; 
+      } else {
+        msgPara.innerHTML = "ℹ️ <strong>Order Policy:</strong> Orders placed before 4 PM are delivered same-day. Orders after 4 PM are delivered the next day.";
+        msgPara.style.color = "#fff";
+      }
+    }
+
+    // Run on interactions
+    deliveryDateInput.addEventListener("change", refreshMessage);
+    deliveryDateInput.addEventListener("click", updateDateConstraints); // Check time whenever they open picker
+    
+    // Initial Run
+    refreshMessage();
   }
 
 
@@ -327,21 +360,24 @@ function initTreeEvolution() {
 // 6. FALLING LEAVES (Visuals)
 // ===============================
 function initLeafRain() {
-  const fruits = ["🍎", "🍊", "🍌", "🍉", "🍇", "🥝"];
+  const container = document.getElementById("leaves-container");
+  if (!container) return;
+
+  const fruitIcons = ["🍎", "🍊", "🍌", "🍉", "🍇", "🥝"];
+  const containerHeight = document.querySelector(".hero-left").offsetHeight;
 
   for (let i = 0; i < 8; i++) {
     const fruit = document.createElement("div");
-    fruit.textContent = fruits[Math.floor(Math.random() * fruits.length)];
+    fruit.className = "falling-fruit";
+    fruit.textContent = fruitIcons[Math.floor(Math.random() * fruitIcons.length)];
 
-    fruit.style.position = "fixed";
+    // Initial random positions within the container
     fruit.style.top = "-40px";
-    fruit.style.left = Math.random() * window.innerWidth + "px";
+    fruit.style.left = Math.random() * 100 + "%";
     fruit.style.fontSize = 18 + Math.random() * 14 + "px";
     fruit.style.opacity = 0.85;
-    fruit.style.pointerEvents = "none";
-    fruit.style.zIndex = "9999";
 
-    document.body.appendChild(fruit);
+    container.appendChild(fruit);
 
     let y = -40;
     let speed = 0.6 + Math.random() * 1.8;
@@ -350,15 +386,16 @@ function initLeafRain() {
     setInterval(() => {
       y += speed;
       fruit.style.top = y + "px";
-      fruit.style.left = parseFloat(fruit.style.left) + drift + "px";
+      
+      // Horizontal drift
+      let currentLeft = parseFloat(fruit.style.left);
+      fruit.style.left = (currentLeft + drift/10) + "%";
 
-      if (y > window.innerHeight + 50) {
+      // Reset when it hits the bottom of the hero section
+      if (y > containerHeight + 50) {
         y = -40;
-        fruit.textContent =
-          fruits[Math.floor(Math.random() * fruits.length)];
-        fruit.style.left = Math.random() * window.innerWidth + "px";
-        speed = 0.6 + Math.random() * 1.8;
-        drift = Math.random() * 2 - 1;
+        fruit.textContent = fruitIcons[Math.floor(Math.random() * fruitIcons.length)];
+        fruit.style.left = Math.random() * 100 + "%";
       }
     }, 16);
   }
@@ -456,9 +493,91 @@ function setupFormSubmission() {
     // Form submits naturally to FormSubmit.co
   });
 }
+// Toggle Search Bar Visibility
+function toggleSearchBar() {
+    const overlay = document.getElementById("searchOverlay");
+    overlay.classList.toggle("active");
+    if (overlay.classList.contains("active")) {
+        document.getElementById("fruitSearch").focus();
+    } else {
+        document.getElementById("fruitSearch").value = "";
+        filterFruits(); // Reset grid when closing
+    }
+}
+
+// Filter Algorithm
+function filterFruits() {
+    const query = document.getElementById("fruitSearch").value.toLowerCase();
+    
+    // Filter the arrays based on the name
+    const filteredFruits = fruits.filter(f => f.name.toLowerCase().includes(query));
+    const filteredCombos = combos.filter(c => c.name.toLowerCase().includes(query));
+
+    // Re-render the grid with only filtered items
+    renderFilteredGrid(filteredFruits, filteredCombos);
+}
+
+// Specialized Render for Filtering
+function renderFilteredGrid(fList, cList) {
+    const weightContainer = document.getElementById("fruitContainerWeight");
+    const pieceContainer  = document.getElementById("fruitContainerPiece");
+    const comboContainer  = document.getElementById("comboContainer");
+
+    // Clear existing content
+    weightContainer.innerHTML = "";
+    pieceContainer.innerHTML = "";
+    comboContainer.innerHTML = "";
+
+    // Re-populate with filtered data
+    fList.forEach(fruit => {
+        (fruit.type === "weight" ? weightContainer : pieceContainer)
+            ?.insertAdjacentHTML("beforeend", createCard(fruit));
+    });
+
+    cList.forEach(combo => {
+        comboContainer?.insertAdjacentHTML("beforeend", createCard(combo, true));
+    });
+
+    // Handle "No Results" case
+    if (fList.length === 0 && cList.length === 0) {
+        weightContainer.innerHTML = `<p style="grid-column: 1/-1; text-align:center; padding: 20px; color: var(--wood);">No fruits found matching your search. 🌱</p>`;
+    }
+    
+    // Important: Update quantities in the newly rendered cards
+    [...fList, ...cList].forEach(item => {
+        const qtyEl = document.getElementById(`qty-${item.id}`);
+        if (qtyEl && cart[item.id]) qtyEl.innerText = cart[item.id];
+    });
+}
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js')
+      .then(reg => console.log('Service Worker Registered!', reg))
+      .catch(err => console.log('Service Worker Error', err));
+  });
+}
 
 
+let deferredPrompt;
 
+window.addEventListener('beforeinstallprompt', (e) => {
+    // Prevent default browser bar
+    e.preventDefault();
+    // Save the event
+    deferredPrompt = e;
+    // Show our custom vertical install button
+    installContainer.style.display = 'flex';
+});
 
-
-
+installBtn.addEventListener('click', () => {
+    if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then((choiceResult) => {
+            if (choiceResult.outcome === 'accepted') {
+                installContainer.style.display = 'none';
+            }
+            deferredPrompt = null;
+        });
+    }
+});

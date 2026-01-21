@@ -706,3 +706,175 @@ body.dark-mode .item-card.unavailable-card {
     background-color: #252525;
     opacity: 0.5;
 }
+/* Search Toggle Button */
+.search-toggle {
+    position: fixed;
+    top: 20px;
+    right: 75px; /* Placed next to the theme toggle */
+    z-index: 1000;
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: 2px solid var(--wood);
+    color: var(--wood);
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+/* Search Overlay Container */
+.search-overlay {
+    position: fixed;
+    top: -100px; /* Hidden by default */
+    left: 0;
+    width: 100%;
+    height: 80px;
+    background: var(--forest-dark);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 20px;
+    z-index: 1100;
+    transition: top 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
+.search-overlay.active {
+    top: 0;
+}
+
+/* Search Input Field */
+#fruitSearch {
+    width: min(90%, 600px);
+    padding: 12px 20px;
+    border-radius: 30px;
+    border: 2px solid var(--wood);
+    background: var(--cream);
+    color: var(--forest-dark);
+    font-family: var(--font-body);
+    font-size: 1rem;
+    outline: none;
+}
+
+.close-search {
+    background: none;
+    border: none;
+    color: var(--wood);
+    font-size: 2rem;
+    margin-left: 15px;
+    cursor: pointer;
+}
+.hero-left {
+    position: relative; /* Acts as the boundary for absolute fruits */
+    overflow: hidden;   /* Hides fruits once they hit the bottom of the hero */
+}
+
+/* Ensure the falling fruits stay within this container */
+.falling-fruit {
+    position: absolute !important; 
+    pointer-events: none;
+    z-index: 5;
+}
+
+/* ======================================================
+   ADDITIONAL STYLES FOR FUTURE FEATURES
+
+   /* Change 1: Increase the height of the container */
+.item-card .img-box {
+    padding: 5px;          /* Reduced from 10px to give image more room */
+    height: 120px;         /* Increased from 100px */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Change 2: Allow the image to take up more space */
+.item-card .img-box img {
+    max-width: 110%;       /* Allow it to slightly overflow the padding if needed */
+    max-height: 110%;      /* Increased from 100% */
+    object-fit: contain;   /* Keeps the fruit shape natural */
+    transition: transform 0.3s ease;
+}
+
+/* Optional: Add a subtle zoom on hover for a premium feel */
+.item-card:hover .img-box img {
+    transform: scale(1.15); 
+}
+/* Container: Moved lower and tightened up */
+.side-controls {
+    position: fixed;
+    top: 95px; /* Moved down to clear the 80px search bar */
+    right: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px; /* Reduced space between buttons */
+    z-index: 2000;
+    align-items: flex-end;
+}
+
+/* Smaller, compact buttons */
+.control-btn {
+    width: 38px;  /* Reduced from 45px */
+    height: 38px; /* Reduced from 45px */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--forest-dark);
+    border: 1.5px solid var(--wood);
+    color: var(--wood);
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.3);
+    transition: transform 0.2s;
+    font-size: 0.9rem; /* Smaller icons */
+}
+
+/* Compact Install Hint */
+.install-hint {
+    background: var(--wood);
+    color: var(--forest-dark);
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 0.6rem; /* Smaller text */
+    font-weight: 800;
+    text-transform: uppercase;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    white-space: nowrap;
+}
+
+/* Mobile Specific: Even smaller on phones to prevent crowding */
+@media (max-width: 600px) {
+    .side-controls {
+        top: 90px;
+        right: 10px;
+        gap: 6px;
+    }
+    .control-btn {
+        width: 34px;
+        height: 34px;
+        font-size: 0.8rem;
+    }
+    .install-hint {
+        font-size: 0.55rem;
+        padding: 2px 6px;
+    }
+}
+@media (max-width: 600px) {
+    #fruitSearch {
+        padding: 8px 15px; /* Slimmer input box */
+        font-size: 0.9rem;
+    }
+    .search-overlay {
+        height: 70px; /* Shortened overlay */
+    }
+    .side-controls {
+        top: 80px; /* Adjusted anchor for the shorter overlay */
+    }
+}
+#installBtn:disabled {
+    opacity: 0.5;
+    cursor: wait;
+    border-style: dotted; /* Visual cue it's loading */
+}

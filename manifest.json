@@ -1,0 +1,22 @@
+{
+  "name": "Fruit Basket KGP",
+  "short_name": "Fruit Basket",
+  "description": "Premium fruits delivered fast to IIT Kharagpur campus.",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#f4f1de",
+  "theme_color": "#1b2e2e",
+  "icons": [
+    {
+      "src": "logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

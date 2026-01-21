@@ -11,22 +11,41 @@
 
 <link rel="icon" href="logo.png">
 <link rel="apple-touch-icon" href="logo.png">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1b2e2e">
 </head>
 
 <body>
 
-<button class="theme-toggle" onclick="toggleTheme()">
-  <i class="fa-solid fa-tree" id="themeIcon"></i>
-</button>
+<div class="side-controls">
+  <div id="installContainer" class="side-control-item">
+    <!-- <span class="install-hint" id="installHint">Checking...</span> -->
+    <button id="installBtn" class="control-btn install-style" disabled>
+        <i class="fa-solid fa-spinner fa-spin" id="installIcon"></i>
+    </button>
+</div>
 
-<div id="tree-container">
+  <button class="control-btn" onclick="toggleSearchBar()">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+
+  <button class="control-btn" onclick="toggleTheme()">
+    <i class="fa-solid fa-tree"></i>
+  </button>
+</div>
+
+<div class="search-overlay" id="searchOverlay">
+  <input type="text" id="fruitSearch" placeholder="Search for fruits (e.g. Mango, Apple)..." onkeyup="filterFruits()">
+  <button onclick="toggleSearchBar()" class="close-search">&times;</button>
+</div>
+<!-- <div id="tree-container">
   <img src="tree_1.png" id="evo-tree" class="seed-stage">
   <div class="tree-tooltip" id="tree-msg">Planting...</div>
-</div>
+</div> -->
 
 <header class="split-hero">
   <div class="hero-left">
-    <div id="leaves-container"></div>
+    <div id="leaves-container" style="display: block;"></div>
 
     <div class="brand-wrapper fade-up">
       <div class="logo-stack">
