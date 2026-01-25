@@ -226,9 +226,10 @@ function createCard(item, isCombo = false) {
       </div>
       <div class="item-name">${item.name}</div>
       <div class="item-price">
-        ₹${item.price}
-        <span class="item-unit"> / ${item.unit}</span>
-      </div>
+  ${item.originalPrice ? `<span class="old-price">₹${item.originalPrice}</span>` : ""}
+  ₹${item.price}
+  <span class="item-unit"> / ${item.unit}</span>
+</div>
       
       ${comboListHtml} 
       ${actionHtml}
@@ -582,3 +583,4 @@ installBtn.addEventListener('click', () => {
     }
 
 });
+
