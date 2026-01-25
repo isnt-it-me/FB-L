@@ -877,4 +877,11 @@ body.dark-mode .item-card.unavailable-card {
     opacity: 0.5;
     cursor: wait;
     border-style: dotted; /* Visual cue it's loading */
+
+}
+.old-price {
+  text-decoration: line-through;
+  opacity: 0.6;
+  margin-right: 6px;
+  font-size: 0.9em;
 }
