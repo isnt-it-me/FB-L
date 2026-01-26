@@ -35,7 +35,7 @@ const fruits = [
   { id: 109, name: "Kashmiri Small Apple", price: 40, unit: "250g", type: "weight", img: "./shimla_sa.png" ,available: true},
   { id: 110, name: "Kinnor(Kinnu)", price: 30, unit: "250g", type: "weight", img: "./orange.png" ,available: true},
   { id: 112, name: "Pears", price: 160, unit: "500g", type: "weight", img: "./pear.png" ,available: true},
-  { id: 113, name: "Strawberry", price: 140, originalPrice: 140, unit: "per box", type: "weight", img: "./strawberry.png" ,available: true},
+  { id: 113, name: "Strawberry", price: 140, originalPrice: 150, unit: "per box", type: "weight", img: "./strawberry.png" ,available: true},
   { id: 114, name: "Pomegranate", price:115 , unit: "500g", type: "weight", img: "./pomegranate.png" ,available: true},
   { id: 115, name: "Black Grapes", price: 80, unit: "250g", type: "weight", img: "./black_grapes.png" ,available: true},
   { id: 116, name: "Orange", price: 65, unit: "500g", type: "weight", img: "./orange.png" , available: true},
@@ -583,5 +583,6 @@ installBtn.addEventListener('click', () => {
     }
 
 });
+
 
 
