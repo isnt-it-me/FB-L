@@ -7,15 +7,15 @@ const ASSETS = [
   '/logo.png'
 ];
 
-// Install - cache core
+// Install
 self.addEventListener('install', (event) => {
-  self.skipWaiting(); // activate immediately
+  self.skipWaiting();
   event.waitUntil(
     caches.open(CACHE_NAME).then(cache => cache.addAll(ASSETS))
   );
 });
 
-// Activate - clean old caches
+// Activate
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then(keys =>
@@ -26,7 +26,7 @@ self.addEventListener('activate', (event) => {
       )
     )
   );
-  self.clients.claim(); // take control of open tabs
+  self.clients.claim();
 });
 
 // Fetch - stale while revalidate
@@ -39,8 +39,6 @@ self.addEventListener('fetch', (event) => {
           return response;
         });
       });
-
-      // Serve cache instantly, update in background
       return cached || networkFetch;
     })
   );
