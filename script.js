@@ -70,10 +70,10 @@ const combos = [
   { 
     id: "essential", 
     name: "Daily Essentials", 
-    price: 119, 
+    price: 114, 
     unit: "pack", 
     img: "./essential.png",
-    contents: ["2 Bananas", "2 Apples", "1 Orange"],
+    contents: ["2 Bananas", "1 Apples", "1 Orange"],
     available: true,
   },
   { 
@@ -583,6 +583,7 @@ installBtn.addEventListener('click', () => {
     }
 
 });
+
 
 
 
